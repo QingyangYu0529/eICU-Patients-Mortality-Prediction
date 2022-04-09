@@ -10,22 +10,10 @@ All data comes from [eICU Collaborative Research Database Demo](https://physione
 
 
 ## Maintainer
-@lejiahu776
-| Name        | Email                | Organization                                                 |
-| :---------: | ---------------------| ------------------------------------------------------------ |
-| Lejia Hu | lejia.hu@yale.edu | Graduate student, Yale School of Public Health, Yale University |
 
-@YCKellyLiu
-| Name        | Email                | Organization                                                 |
-| :---------: | ---------------------| ------------------------------------------------------------ |
-| Yuechen Liu | yuechen.liu@yale.edu | Graduate student, Yale School of Public Health, Yale University |
-
-@QingyangYu0529
-| Name        | Email                | Organization                                                 |
-| :---------: | ---------------------| ------------------------------------------------------------ |
-| Qingyang Yu | qingyang.yu@yale.edu | Graduate student, Yale School of Public Health, Yale University |
-
-@kristalz
-| Name        | Email                | Organization                                                 |
-| :---------: | ---------------------| ------------------------------------------------------------ |
-| Krsital Zhou | kristal.zhou@yale.edu | Graduate student, Yale School of Public Health, Yale University |
+| Name         | Github Account  | Email                 | Organization                                                 |
+| :----------: | ----------------|-----------------------| ------------------------------------------------------------ |
+| Lejia Hu     | @lejiahu776     | lejia.hu@yale.edu     | Graduate student, Yale School of Public Health               |
+| Yuechen Liu  | @YCKellyLiu     | yuechen.liu@yale.edu  | Graduate student, Yale School of Public Health               |
+| Qingyang Yu  | @QingyangYu0529 | qingyang.yu@yale.edu  | Graduate student, Yale School of Public Health               |
+| Kristal Zhou | @kristalz       | kristal.zhou@yale.edu | Graduate student, Yale School of Public Health               |
