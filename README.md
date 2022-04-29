@@ -1,6 +1,6 @@
 # eICU-Patients-Mortality-Prediction
 
-This repository is used for CBB 750 final project.
+This repository is used for final project of the course CBB 750: Core Topics in Biomedical Informatics.
 
 ## Background
 
