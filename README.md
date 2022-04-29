@@ -9,11 +9,16 @@ Electronic Intensive Care Unit (eICU) supports caregivers to provide diagnoses a
 
 ## Methods
 
-1) For data integration, we use database management system such as MySQL to create database and do queries, in order to have a general overview of potential relationships between different factors. 
+1) For data integration, we used database management system MySQL to create database by joining four datasets: apachepredvar.csv, apacheapsvar.csv, lab1.csv and patient.csv.
 
-2) For data cleaning, we use pandas and numpy if needed to drop the unwanted columns and rows and select needed information to generate a cleaned and structured dataset.
+2) For data cleaning:
 
-3) For mortality prediction of eICU patients, we use prediction methods such as native bayes and logistic regression with model enhancement.
+a. First we removed redundant columns and rows by comparing missing values of each column manually and select which to drop, and removing the duplicated patient information (only kept the last record for each patient). 
+b. Then we solved the problem of missing values by replacing with mean or median of the variable or dropping all missing values. We also encoded categorical data to numerical or dummy variables: encoded "Gender" and "ethnicity" into dummy variables, and adjusted "age" so that all patients who are more than 89 years old was assigned as 89 years old. We created  used pandas and numpy if needed to drop the unwanted columns and rows and select needed information to generate a cleaned and structured dataset.
+
+3) For mortality prediction of eICU patients, we used two machine learning techniques: logistic regression and random forest.
+
+4) We used cross validation to evaluate the model performance. 
 
 
 ## Data source
