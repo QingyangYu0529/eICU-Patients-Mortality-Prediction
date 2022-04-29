@@ -1,0 +1,30 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(car)
+library(ggplot2)
+df <- read.csv(file = 'unique750.csv')
+df <- df[ , which(names(df) %in% c('creatinine','temperature', 'meanbp', 'fio2/pao2', 'GCS', 'bicarbonate', 'saps_score', 'vent', 'ethnicity', 'lymphoma', 'hepaticfailure','unitdischargestatus'))]
+head(df)
+names(df)
+```
+```{r}
+attach(df)
+boxTidwell(unitdischargestatus ~ saps_score, 
+           other.x = ~ temperature + meanbp + GCS + bicarbonate + creatinine, 
+           data = df)
+```
+```{r}
+lreg <- glm(unitdischargestatus ~ saps_score + (saps_score:log(saps_score)) + temperature + meanbp  + GCS + bicarbonate + creatinine, 
+            data=df, 
+            family=binomial(link="logit"))
+logodds <- lreg$linear.predictors
+summary(lreg)
+plot.dat <- data.frame(logodds = logodds, age = df$saps_score)
+ggplot(plot.dat, aes(x=saps_score, y=logodds)) + geom_point()
+plot(saps_score, logodds, data = plot.dat, xlab = "SAPS Score", ylab = "Log odds", main = "Linearity of log odds in SAPS Score", col = "red", pch = 19)
+abline(lm(logodds ~ saps_score, data = plot.dat), col = "black", lwd = 2)
+```

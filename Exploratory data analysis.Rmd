@@ -1,0 +1,132 @@
+---
+title: "CBB 750 Final Project - Exploratory Data Analysis"
+author: ""
+output:
+  html_document: default
+  word_document: default
+  pdf_document: default
+---
+
+```{r}
+# load libraries.
+library(dplyr)
+library(ggplot)
+```
+
+```{r}
+# load data.
+setwd("D:/yale/Course/CBB 750 Core Topics in Biomedical Informatics and Data Science/final project/Project 2/Project")
+data <- read.csv("unique750.csv")
+dim(data)
+head(data)
+
+# recode gender, ethnicity, unit discharge status.
+data$gender <- as.factor(data$gender)
+levels(data$gender) <- c("Female", "Male")
+
+data$ethnicity <- as.factor(data$ethnicity)
+levels(data$ethnicity) <- c("Caucasian", "Hispanic", "African American", "Other", "Asian", "Native American")
+
+data$unitdischargestatus <- as.factor(data$unitdischargestatus)
+levels(data$unitdischargestatus) <- c("Expire", "Alive")
+```
+
+
+```{r}
+# uni variate analysis.
+# draw barplots of gender, age and ethnicity.
+gender_counts <- table(data$gender)
+par(mar = c(5, 11, 4, 1))
+y <- barplot(gender_counts, main = "Patient Gender Distribution", col = "blue", xlab = "Frequency", ylab = "Gender", horiz = T, las = 1, space = 0.6, xlim = c(0, 1200))
+text(x = gender_counts + 40, y, labels = as.character(gender_counts), cex = 1.1)
+
+age_counts <- table(data$age)
+par(mar = c(5, 11, 4, 1))
+barplot(age_counts, main = "Patient Age Distribution", col = "blue", xlab = "Frequency", ylab = "Age", horiz = T, las = 1, space = 0.7, xlim = c(0, 100))
+hist(age_counts, col = "blue", xlab = "Age", ylab = "Frequency", main = "Patient Age Distribution", xlim = c(0, 100))
+
+par(mar = c(5, 11, 4, 1))
+ethnicity_counts <- table(data$ethnicity)
+y <- barplot(ethnicity_counts, main = "Patient Ethnicity Distribution", col = "blue", xlab = "Frequency", ylab = "", horiz = T, las = 1, space = 0.3, xlim = c(0, 1600))
+text(x = ethnicity_counts + 50, y, labels = as.character(ethnicity_counts), cex = 1)
+title(ylab = "Ethnicity", cex.lab = 1, line = 8)
+
+# draw barplots of patient SAPS score, discharge status and type of admission.
+saps_table <- table(data$saps_score)
+par(mar = c(5, 11, 4, 1))
+hist(data$saps_score, xlim = c(0, 100), xlab = "SAPS Score", main = "SAPS Score Distribution", col = "orange")
+
+dischargestatus_counts <- table(data$unitdischargestatus)
+par(mar = c(5, 11, 4, 1))
+y <- barplot(dischargestatus_counts, main = "Patient Discharge Status Distribution", col = "orange", xlab = "Frequency", ylab = "", horiz = T, las = 1, space = 0.6, xlim = c(0, 2000))
+text(x = dischargestatus_counts + 100, y, labels = as.character(dischargestatus_counts), cex = 1.1)
+title(ylab = "Discharge Status", cex.lab = 1, line = 4)
+
+typeofadmission_counts <- table(data$type_of_admission)
+par(mar = c(5, 11, 4, 1))
+y <- barplot(typeofadmission_counts, main = "Patient Type of Admissions", col = "orange", xlab = "Frequency", ylab = "", horiz = T, las = 1, space = 0.6, xlim = c(0, 2000))
+text(x = typeofadmission_counts + 100, y, labels = as.character(typeofadmission_counts), cex = 1.1)
+title(ylab = "Patient Type of Admissions", cex.lab = 1, line = 6)
+```
+```{r}
+# draw plot of age and unit discharge status.
+boxplot(data$age ~ data$unitdischargestatus, xlab = "Discharge Status", ylab = "Age", col = "orange", main = "Age vs. Discharge Status")
+means <- tapply(data$age, data$unitdischargestatus, mean)
+points(means, col = "red", pch = 19, cex = 0.9)
+text(x = c(1:2), y = means + 6, labels = round(means, 1), cex = 0.9)
+
+ggplot(data, aes(x = unitdischargestatus, y = age, fill = unitdischargestatus)) + 
+  geom_violin() +
+  theme_bw() + 
+  labs(y = "Age", x = "Discharge Status", fill = "Discharge Status") +
+  theme(text = element_text(size = 15), axis.text = element_text(size = 13), plot.title = element_text(size = 16, hjust = 0.5), legend.title=element_text(size = 12)) + 
+  ylim(0, 100) +
+  ggtitle("Age vs. Discharge Status") +
+  geom_boxplot(width=0.1, fill="white")
+
+# draw plot of ethnicity and unit discharge status.
+ethnicity_discharge <- data.frame(data$ethnicity, data$unitdischargestatus)
+names(ethnicity_discharge) <- c("Ethnicity", "DischargeStatus")
+ggplot(ethnicity_discharge, aes(x = Ethnicity, ..count..)) + 
+  geom_bar(aes(fill = DischargeStatus), position = "dodge") + 
+  theme_bw() + 
+  labs(y = "Frequency", x = "Ethnicity", fill = "Discharge Status") +
+  theme(text = element_text(size = 15), axis.text = element_text(size = 9), plot.title = element_text(size = 16, hjust = 0.5), legend.title=element_text(size = 12)) + 
+  ylim(0, 1500) + 
+  ggtitle("Ethnicity vs. Discharge Status")
+
+# draw plot of type of admission and unit discharge status.
+data$type_of_admission <- as.factor(data$type_of_admission)
+levels(data$type_of_admission) <- c("Other", "Scheduled", "Unscheduled")
+admission_discharge <- data.frame(data$type_of_admission, data$unitdischargestatus)
+names(admission_discharge) <- c("TypeofAdmission", "DischargeStatus")
+ggplot(admission_discharge, aes(x = TypeofAdmission, ..count..)) + 
+  geom_bar(aes(fill = DischargeStatus), position = "dodge") + 
+  theme_bw() +
+  labs(y = "Frequency", x = "Type of Admission", fill = "Discharge Status") +
+  theme(text = element_text(size = 15), axis.text = element_text(size = 13), plot.title = element_text(size = 16, hjust = 0.5), legend.title=element_text(size = 12)) +
+  ylim(0, 1500) +
+  ggtitle("Type of Admission vs. Discharge Status")
+
+# draw plot of saps score and unit discharge status.
+ggplot(data, aes(x = unitdischargestatus, y = saps_score, fill = unitdischargestatus)) + 
+  geom_violin() +
+  theme_bw() + 
+  labs(y = "SAPS Score", x = "Discharge Status", fill = "Discharge Status") +
+  theme(text = element_text(size = 15), axis.text = element_text(size = 13), plot.title = element_text(size = 16, hjust = 0.5), legend.title=element_text(size = 12)) + 
+  ylim(0, 100) +
+  ggtitle("SAPS Score vs. Discharge Status") +
+  geom_boxplot(width=0.1, fill="white")
+```
+
+```{r}
+# bivariate analysis.
+barplot(data$unitdischargestatus)
+par(mar = c(5, 11, 4, 1))
+y <- barplot(typeofadmission_counts, main = "Patient Type of Admissions", col = "orange", xlab = "Frequency", ylab = "", horiz = T, las = 1, space = 0.6, xlim = c(0, 2000))
+data$gender
+
+```
+
+
+THE END
